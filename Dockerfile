@@ -7,9 +7,6 @@ RUN apt-get update -y \
     
 WORKDIR /app
 
-RUN pip install pdm
-RUN pdm install
-
 COPY requirements.txt .
 
 RUN pip install --no-cache-dir -U pip \
