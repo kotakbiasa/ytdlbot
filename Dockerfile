@@ -5,10 +5,10 @@ RUN apt-get update -y \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
     
+WORKDIR /app
+
 RUN pip install pdm
 RUN pdm install
-
-WORKDIR /app
 
 COPY requirements.txt .
 
