@@ -1,32 +1,16 @@
-# Stage 1: Build dependencies
 FROM python:3.12-alpine AS pybuilder
-
-# Copy dependency files
 ADD pyproject.toml pdm.lock /build/
 WORKDIR /build
+RUN apk add alpine-sdk python3-dev musl-dev linux-headers
+RUN pip install pdm
+RUN pdm install
 
-# Install build tools and dependencies
-RUN apk add --no-cache alpine-sdk python3-dev musl-dev linux-headers \
-    && pip install pdm \
-    && pdm install --prod
-
-# Stage 2: Application runtime
 FROM python:3.12-alpine AS runner
-
-# Set working directory
 WORKDIR /app
 
-# Install runtime dependencies
-RUN apk add --no-cache ffmpeg aria2
-
-# Copy Python virtual environment from the build stage
+RUN apk update && apk add --no-cache ffmpeg aria2
 COPY --from=pybuilder /build/.venv/lib/ /usr/local/lib/
-
-# Copy source code
 COPY src /app
-
-# Set working directory
 WORKDIR /app
 
-# Default command
-CMD ["python", "main.py"]
+CMD ["python" ,"main.py"]
