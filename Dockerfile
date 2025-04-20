@@ -19,10 +19,6 @@ WORKDIR /app
 # Install runtime dependencies
 RUN apk add --no-cache ffmpeg aria2
 
-# Copy only the necessary files
-COPY requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt
-
 # Copy Python virtual environment from the build stage
 COPY --from=pybuilder /build/.venv/lib/ /usr/local/lib/
 
