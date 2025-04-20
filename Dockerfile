@@ -9,6 +9,8 @@ FROM python:3.12-alpine AS runner
 WORKDIR /app
 
 RUN apk update && apk add --no-cache ffmpeg aria2
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
 COPY --from=pybuilder /build/.venv/lib/ /usr/local/lib/
 COPY src /app
 WORKDIR /app
